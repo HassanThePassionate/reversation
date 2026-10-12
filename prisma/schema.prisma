@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+enum ReservationStatus {
+  CONFIRMED
+  CANCELLED
+}
+
+model Team {
+  id           String        @id @default(cuid())
+  name         String        @unique
+  users        User[]
+  reservations Reservation[]
+  createdAt    DateTime      @default(now()) @db.Timestamptz(3)
+
+  @@map("teams")
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  passwordHash String
+  role         Role          @default(MEMBER)
+  teamId       String?
+  team         Team?         @relation(fields: [teamId], references: [id], onDelete: SetNull)
+  reservations Reservation[]
+  createdAt    DateTime      @default(now()) @db.Timestamptz(3)
+
+  @@map("users")
+}
+
+model ResourceType {
+  id          String     @id @default(cuid())
+  name        String     @unique
+  description String?
+  resources   Resource[]
+
+  @@map("resource_types")
+}
+
+model Resource {
+  id           String        @id @default(cuid())
+  name         String
+  typeId       String
+  type         ResourceType  @relation(fields: [typeId], references: [id], onDelete: Restrict)
+  location     String?
+  capacity     Int?
+  description  String?
+  openTime     String        @default("08:00") // HH:mm in org timezone
+  closeTime    String        @default("20:00")
+  isActive     Boolean       @default(true)
+  reservations Reservation[]
+  createdAt    DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime      @updatedAt @db.Timestamptz(3)
+
+  @@index([typeId])
+  @@index([isActive, name])
+  @@map("resources")
+}
+
+model Reservation {
+  id          String            @id @default(cuid())
+  resourceId  String
+  resource    Resource          @relation(fields: [resourceId], references: [id], onDelete: Restrict)
+  userId      String
+  user        User              @relation(fields: [userId], references: [id], onDelete: Restrict)
+  teamId      String?
+  team        Team?             @relation(fields: [teamId], references: [id], onDelete: SetNull)
+  title       String
+  notes       String?
+  startTime   DateTime          @db.Timestamptz(3)
+  endTime     DateTime          @db.Timestamptz(3)
+  status      ReservationStatus @default(CONFIRMED)
+  cancelledAt DateTime?         @db.Timestamptz(3)
+  createdAt   DateTime          @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime          @updatedAt @db.Timestamptz(3)
+
+  @@index([resourceId, startTime])
+  @@index([userId, startTime])
+  @@index([status, startTime, endTime])
+  @@index([userId, status, startTime])
+  @@map("reservations")
+}
