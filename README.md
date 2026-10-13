@@ -6,7 +6,7 @@ A reservation manager for shared organizational resources such as meeting rooms,
 
 - Repository: [source code](<REPOSITORY_URL>)
 - Demo video: [watch the demo](<DEMO_VIDEO_URL>)
-- ER diagram: [view the diagram](<ER_DIAGRAM_URL>)
+- ER diagram: [view the diagram] ("https://drawsql.app/draw?t=15835d72-0e29-45e8-bba9-fcdd8cbdb9ce&view=1")
 
 ## Requirements
 
