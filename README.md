@@ -4,8 +4,7 @@ A reservation manager for shared organizational resources such as meeting rooms,
 
 ## Project links
 
-- Repository: [source code](<REPOSITORY_URL>)
-- Demo video: [watch the demo](<DEMO_VIDEO_URL>)
+- Demo video: [watch the demo] ("https://drive.google.com/file/d/1-n5gNFGYpaEI1oboKVAbCiFWdBXTQpW4/view?usp=sharing")
 - ER diagram: [view the diagram] ("https://drawsql.app/draw?t=15835d72-0e29-45e8-bba9-fcdd8cbdb9ce&view=1")
 
 ## Requirements
